@@ -1,0 +1,5 @@
+[flake8]
+ignore = I000, I003, I100, D203, D401, F401, W504, E501, I201, E731, E712, Q000, D100, D101
+exclude = .venv, wsgi.py, .git, __pycache__, docs/source/conf.py, old, build, dist, .rst
+max-line-length = 140
+max-complexity = 20

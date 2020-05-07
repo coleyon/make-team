@@ -1,0 +1,19 @@
+{
+    // workspace settings.json
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--config=.flake8",
+    ],
+    "terminal.integrated.shellArgs.windows": [
+        "-NoExit",
+        "chcp 65001"
+    ],
+    "python.linting.enabled": true,
+    // "python.envFile": "${workspaceFolder}/.env.example",
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.pythonPath": "C:\\Users\\mitchy\\.virtualenvs\\make-team-K4b_SKh-\\Scripts\\python.exe",
+    "python.formatting.provider": "black"
+}
