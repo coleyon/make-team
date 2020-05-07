@@ -9,7 +9,12 @@ from modules.grouping import MakeTeam
 token = os.environ["DISCORD_BOT_TOKEN"]
 bot = commands.Bot(command_prefix="/")
 MAX_PARTY_MEM = 6
-MEMBER_TEMPLATE = {"壁": [], "火力": [], "支援": [], "お座り": []}
+MEMBER_TEMPLATE = {
+    "壁": ["a", "b", "c"],
+    "火力": ["d", "e"],
+    "支援": ["f", "g", "h", "i"],
+    "お座り": ["z"],
+}
 stocked_mem = MEMBER_TEMPLATE.copy()
 
 
@@ -137,19 +142,24 @@ async def party(ctx, pt_num=1, alloc_num=6):
     #         "SYNOPSYS: /party [Number of Party] [Number of Members in each Party]\n\tNumber of Party: 1~(Number of Stocked Members)\n\tNumber of Members in each Party: 1~6"
     #     )
 
-    parties = {}
-    pools = list(stocked_mem.values())
-    pools = [list(s) for s in itertools.zip_longest(*pools)]
-    flatten_pools = [item for sublist in pools for item in sublist if item is not None]
-    flatten_pools.reverse()
-    for party in range(pt_num):
-        # creating the party
-        parties[party] = []
-        for alloc in range(alloc_num):
-            if len(flatten_pools):
-                parties[party].append(flatten_pools.pop())
-            else:
-                break
+    try:
+        parties = {}
+        pools = list(stocked_mem.values())
+        pools = [list(s) for s in itertools.zip_longest(*pools)]
+        flatten_pools = [
+            item for sublist in pools for item in sublist if item is not None
+        ]
+        flatten_pools.reverse()
+        for party in range(pt_num):
+            # creating the party
+            parties[party] = []
+            for alloc in range(alloc_num):
+                if len(flatten_pools):
+                    parties[party].append(flatten_pools.pop())
+                else:
+                    break
+    except BaseException as e:
+        return await ctx.channel.send(str(e))
 
     await ctx.channel.send(
         "パーティを編成しました。\n{result}".format(result=_get_member_list(parties))
