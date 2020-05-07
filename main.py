@@ -3,6 +3,7 @@ import itertools
 import traceback
 import discord
 from discord.ext import commands
+import json
 
 
 token = os.environ["DISCORD_BOT_TOKEN"]
@@ -46,20 +47,21 @@ async def clear(ctx, group=""):
     if group in stocked_mem.keys():
         # group clear mode
         stocked_mem[group] = []
-        msg = "{grp} グループのメンバーリストを空にしました。".format(grp=group)
+        msg = "{grp} グループのメンバーリストを空にしました。\n{m}".format(
+            grp=group, m=_get_member_list(stocked_mem)
+        )
     await ctx.channel.send(msg)
 
 
 @bot.command()
-async def remove(ctx, *args):
+async def remove(ctx, group, *args):
     global stocked_mem
     params = _join_args(args)
-    msg = "SYNOPSIS: /remove <Group>,<Member-1>[,Member-n]"
-    if len(params) < 2:
+    msg = "SYNOPSIS: /remove <Group> <Member-1>[,Member-n]"
+    if len(params) < 1:
         return await ctx.channel.send(msg)
 
-    group = params[0]
-    members = params[1:]
+    members = params
     for removal in members:
         stocked_mem[group].remove(removal)
     msg = "{m} を {rem_from} グループから除去しました。".format(m=", ".join(members), rem_from=group)
@@ -113,7 +115,9 @@ async def party(ctx, pt_num=1, alloc_num=6):
             if len(flatten_pools):
                 parties[party].append(flatten_pools.pop())
 
-    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=str(parties))
+    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(
+        res=json.dumps(parties, indent=4, sort_keys=True)
+    )
     await ctx.channel.send(msg)
 
 
