@@ -4,7 +4,6 @@ import traceback
 import discord
 from discord.ext import commands
 
-from modules.grouping import MakeTeam
 
 token = os.environ["DISCORD_BOT_TOKEN"]
 bot = commands.Bot(command_prefix="/")
@@ -24,34 +23,6 @@ async def on_ready():
     print(bot.user.id)
     print(discord.__version__)
     print("------------------------")
-
-
-@bot.command()
-async def team(ctx, specified_num=2):
-    """メンバー数が均等になるチーム分け
-    """
-    make_team = MakeTeam()
-    remainder_flag = "true"
-    msg = make_team.make_party_num(ctx, specified_num, remainder_flag)
-    await ctx.channel.send(msg)
-
-
-@bot.command()
-async def team_norem(ctx, specified_num=2):
-    """メンバー数が均等にはならないチーム分け
-    """
-    make_team = MakeTeam()
-    msg = make_team.make_party_num(ctx, specified_num)
-    await ctx.channel.send(msg)
-
-
-@bot.command()
-async def group(ctx, specified_num=1):
-    """メンバー数を指定してチーム分け
-    """
-    make_team = MakeTeam()
-    msg = make_team.make_specified_len(ctx, specified_num)
-    await ctx.channel.send(msg)
 
 
 def _join_args(args):
@@ -119,11 +90,10 @@ async def add(ctx, group, *args):
 @bot.command()
 async def count(ctx):
     global stocked_mem
-
     c = 0
     for i in stocked_mem.values():
         c += len(i)
-    await ctx.channel.send("現在{cnt}名をストックしています。".foramt(cnt=c))
+    await ctx.channel.send("現在{cnt}名をストックしています。".foramt(cnt=str(c)))
 
 
 @bot.command()
