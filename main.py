@@ -110,10 +110,11 @@ async def party(ctx, pt_num=1, alloc_num=6):
 
     for party in range(pt_num):
         # creating the party
-        parties[party] = []
+        key = "Party-" + str(party + 1)
+        parties[key] = []
         for alloc in range(alloc_num):
             if len(flatten_pools):
-                parties[party].append(flatten_pools.pop())
+                parties[key].append(flatten_pools.pop())
 
     msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(
         res=json.dumps(parties, indent=4, sort_keys=True)
