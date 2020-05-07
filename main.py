@@ -8,14 +8,13 @@ from modules.grouping import MakeTeam
 
 token = os.environ["DISCORD_BOT_TOKEN"]
 bot = commands.Bot(command_prefix="/")
-MAX_PARTY_MEM = 6
-MEMBER_TEMPLATE = {
-    "壁": ["a", "b", "c"],
-    "火力": ["d", "e"],
-    "支援": ["f", "g", "h", "i"],
-    "お座り": ["z"],
+MEMBER_TEMPLATE = {"defense": [], "attack": [], "support": [], "bench": []}
+stocked_mem = {
+    "defense": ["a", "b", "c"],
+    "attack": ["d", "e"],
+    "support": ["f", "g", "h", "i"],
+    "bench": ["j"],
 }
-stocked_mem = MEMBER_TEMPLATE.copy()
 
 
 @bot.event
@@ -63,15 +62,6 @@ def _get_member_list(mem):
     """get formatted member list
     """
     return "\n".join([i + "= " + ", ".join(mem[i]) for i in [k for k in mem.keys()]])
-
-
-def _current_member_cnt(mem):
-    """get current member count
-    """
-    c = 0
-    for i in mem.items():
-        c += len(i)
-    return c
 
 
 @bot.command()
@@ -131,19 +121,16 @@ async def add(ctx, category, *args):
 @bot.command()
 async def count(ctx):
     global stocked_mem
-    await ctx.channel.send(_current_member_cnt(stocked_mem))
+
+    c = 0
+    for i in stocked_mem.items():
+        c += len(i)
+    await ctx.channel.send("現在{cnt}名をストックしています。".foramt(cnt=c))
 
 
 @bot.command()
 async def party(ctx, pt_num=1, alloc_num=6):
     global stocked_mem
-    # if (
-    #     0 < pt_num <= _current_member_cnt(stocked_mem)
-    #     and 0 < alloc_num <= MAX_PARTY_MEM
-    # ):
-    #     return await ctx.channel.send(
-    #         "SYNOPSYS: /party [Number of Party] [Number of Members in each Party]\n\tNumber of Party: 1~(Number of Stocked Members)\n\tNumber of Members in each Party: 1~6"
-    #     )
 
     parties = {}
     pools = list(stocked_mem.values())
@@ -155,13 +142,11 @@ async def party(ctx, pt_num=1, alloc_num=6):
         # creating the party
         parties[party] = []
         for alloc in range(alloc_num):
-            await ctx.channel.send(str(parties))
             if len(flatten_pools):
                 parties[party].append(flatten_pools.pop())
-            else:
-                break
+        await ctx.channel.send(str(parties))
 
-    msg = "パーティを編成しました。\n{result}".format(result=_get_member_list(parties))
+    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
     await ctx.channel.send(msg)
 
 
