@@ -10,7 +10,7 @@ token = os.environ["DISCORD_BOT_TOKEN"]
 bot = commands.Bot(command_prefix="/")
 MAX_PARTY_MEM = 6
 MEMBER_TEMPLATE = {"壁": [], "火力": [], "支援": [], "お座り": []}
-stocked_mem = MEMBER_TEMPLATE  # as global variable
+stocked_mem = MEMBER_TEMPLATE.copy()
 
 
 @bot.event
@@ -60,56 +60,94 @@ def _get_member_list(mem):
     return "\n".join([i + "= " + ", ".join(mem[i]) for i in [k for k in mem.keys()]])
 
 
+def _current_member_cnt(mem):
+    """get current member count
+    """
+    return sum([len(i) for i in mem.items()])
+
+
 @bot.command()
-async def clear(ctx):
+async def clear(ctx, category=""):
     global stocked_mem
-    stocked_mem = MEMBER_TEMPLATE
-    await ctx.channel.send(
-        "メンバーリストを空にしました。\n{m}".format(m=_get_member_list(stocked_mem))
-    )
+    msg = "SYNOPSIS: /clear [CATEGORY]"
+    if category == "":
+        # all clear mode
+        stocked_mem = MEMBER_TEMPLATE.copy()
+        msg = "メンバーリストを空にしました。\n{m}".format(m=_get_member_list(stocked_mem))
+    if category in stocked_mem.keys():
+        # category clear mode
+        stocked_mem[category] = []
+        msg = "{cat} グループのメンバーリストを空にしました。".format(cat=category)
+    await ctx.channel.send(msg)
 
 
 @bot.command()
 async def remove(ctx, *args):
     global stocked_mem
     params = _join_args(args)
+    msg = "SYNOPSIS: /remove <Category>,<Member-1>[,Member-n]"
     if len(params) < 2:
-        return await ctx.channel.send("構文: /remove 前衛,削除したいメンバー名1,...,削除したいメンバー名n")
+        return await ctx.channel.send(msg)
 
     category = params[0]
     members = params[1:]
-    await ctx.channel.send(
-        "{members} を {removed_from} から除去しました。".format(
-            members=", ".join(members), removed_from=category
-        )
+    for removal in members:
+        stocked_mem[category].remove(removal)
+    msg = "{m} を {rem_from} グループから除去しました。".format(
+        m=", ".join(members), rem_from=category
     )
+    await ctx.channel.send(msg)
 
 
 @bot.command()
-async def show(ctx, *args):
+async def show(ctx):
     global stocked_mem
-    await ctx.channel.send(
-        "現在の登録メンバーは次の通りです。\n{m}".format(m=_get_member_list(stocked_mem))
-    )
+    msg = "現在の登録メンバーは次の通りです。\n{current}".format(current=_get_member_list(stocked_mem))
+    await ctx.channel.send(msg)
 
 
 @bot.command()
 async def add(ctx, category, *args):
     global stocked_mem
+    msg = "SYNOPSYS: /add <Category> <Member-1>[,Member-n]"
+
     stocked_mem[category] = [*stocked_mem[category], *args]
-    await ctx.channel.send(
-        "メンバー {m} を {cat} に追加しました。".format(
-            m="\n".join(stocked_mem[category], cat=category)
-        )
+    msg = "メンバー {m} を {cat} に追加しました。\n{current}".format(
+        m=", ".join(stocked_mem[category]),
+        cat=category,
+        current=_get_member_list(stocked_mem),
     )
+    await ctx.channel.send(msg)
 
 
 @bot.command()
-async def party(ctx, num=1):
-    if 0 < num <= MAX_PARTY_MEM:
-        return await ctx.channel.send("構文: /group 編成パーティ数1~6")
+async def party(ctx, pt_num=1, alloc_num=6):
     global stocked_mem
-    await ctx.channel.send("")
+    if (
+        0 < pt_num <= _current_member_cnt(stocked_mem)
+        and 0 < alloc_num <= MAX_PARTY_MEM
+    ):
+        return await ctx.channel.send(
+            "SYNOPSYS: /party [Number of Party] [Number of Members in each Party]\n\tNumber of Party: 1~(Number of Stocked Members)\n\tNumber of Members in each Party: 1~6"
+        )
+
+    parties = {}
+    pools = list(stocked_mem.values())
+    pools = [list(s) for s in itertools.zip_longest(*pools)]
+    flatten_pools = [item for sublist in pools for item in sublist if item is not None]
+    flatten_pools.reverse()
+    for party in range(pt_num):
+        # creating the party
+        parties[party] = []
+        for alloc in range(alloc_num):
+            if len(flatten_pools):
+                parties[party].append(flatten_pools.pop())
+            else:
+                break
+
+    await ctx.channel.send(
+        "パーティを編成しました。\n{result}".format(result=_get_member_list(parties))
+    )
 
 
 """botの接続と起動"""
