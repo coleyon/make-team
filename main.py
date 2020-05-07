@@ -121,15 +121,21 @@ async def add(ctx, category, *args):
 
 
 @bot.command()
+async def count(ctx):
+    global stocked_mem
+    await ctx.channel.send(_current_member_cnt(stocked_mem))
+
+
+@bot.command()
 async def party(ctx, pt_num=1, alloc_num=6):
     global stocked_mem
-    if (
-        0 < pt_num <= _current_member_cnt(stocked_mem)
-        and 0 < alloc_num <= MAX_PARTY_MEM
-    ):
-        return await ctx.channel.send(
-            "SYNOPSYS: /party [Number of Party] [Number of Members in each Party]\n\tNumber of Party: 1~(Number of Stocked Members)\n\tNumber of Members in each Party: 1~6"
-        )
+    # if (
+    #     0 < pt_num <= _current_member_cnt(stocked_mem)
+    #     and 0 < alloc_num <= MAX_PARTY_MEM
+    # ):
+    #     return await ctx.channel.send(
+    #         "SYNOPSYS: /party [Number of Party] [Number of Members in each Party]\n\tNumber of Party: 1~(Number of Stocked Members)\n\tNumber of Members in each Party: 1~6"
+    #     )
 
     parties = {}
     pools = list(stocked_mem.values())
