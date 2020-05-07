@@ -65,17 +65,17 @@ def _get_member_list(mem):
 
 
 @bot.command()
-async def clear(ctx, category=""):
+async def clear(ctx, group=""):
     global stocked_mem
-    msg = "SYNOPSIS: /clear [CATEGORY]"
-    if category == "":
+    msg = "SYNOPSIS: /clear [Group]"
+    if group == "":
         # all clear mode
         stocked_mem = MEMBER_TEMPLATE.copy()
         msg = "メンバーリストを空にしました。\n{m}".format(m=_get_member_list(stocked_mem))
-    if category in stocked_mem.keys():
-        # category clear mode
-        stocked_mem[category] = []
-        msg = "{cat} グループのメンバーリストを空にしました。".format(cat=category)
+    if group in stocked_mem.keys():
+        # group clear mode
+        stocked_mem[group] = []
+        msg = "{grp} グループのメンバーリストを空にしました。".format(grp=group)
     await ctx.channel.send(msg)
 
 
@@ -83,17 +83,15 @@ async def clear(ctx, category=""):
 async def remove(ctx, *args):
     global stocked_mem
     params = _join_args(args)
-    msg = "SYNOPSIS: /remove <Category>,<Member-1>[,Member-n]"
+    msg = "SYNOPSIS: /remove <Group>,<Member-1>[,Member-n]"
     if len(params) < 2:
         return await ctx.channel.send(msg)
 
-    category = params[0]
+    group = params[0]
     members = params[1:]
     for removal in members:
-        stocked_mem[category].remove(removal)
-    msg = "{m} を {rem_from} グループから除去しました。".format(
-        m=", ".join(members), rem_from=category
-    )
+        stocked_mem[group].remove(removal)
+    msg = "{m} を {rem_from} グループから除去しました。".format(m=", ".join(members), rem_from=group)
     await ctx.channel.send(msg)
 
 
@@ -105,14 +103,14 @@ async def show(ctx):
 
 
 @bot.command()
-async def add(ctx, category, *args):
+async def add(ctx, group, *args):
     global stocked_mem
-    msg = "SYNOPSYS: /add <Category> <Member-1>[,Member-n]"
+    msg = "SYNOPSYS: /add <Group> <Member-1>[,Member-n]"
 
-    stocked_mem[category] = [*stocked_mem[category], *args]
-    msg = "メンバー {m} を {cat} に追加しました。\n{current}".format(
-        m=", ".join(stocked_mem[category]),
-        cat=category,
+    stocked_mem[group] = [*stocked_mem[group], *args]
+    msg = "メンバー {m} を {grp} に追加しました。\n{current}".format(
+        m=", ".join(stocked_mem[group]),
+        grp=group,
         current=_get_member_list(stocked_mem),
     )
     await ctx.channel.send(msg)
@@ -123,7 +121,7 @@ async def count(ctx):
     global stocked_mem
 
     c = 0
-    for i in stocked_mem.items():
+    for i in stocked_mem.values():
         c += len(i)
     await ctx.channel.send("現在{cnt}名をストックしています。".foramt(cnt=c))
 
@@ -144,9 +142,8 @@ async def party(ctx, pt_num=1, alloc_num=6):
         for alloc in range(alloc_num):
             if len(flatten_pools):
                 parties[party].append(flatten_pools.pop())
-        await ctx.channel.send(str(parties))
 
-    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
+    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=str(parties))
     await ctx.channel.send(msg)
 
 
