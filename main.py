@@ -68,7 +68,10 @@ def _get_member_list(mem):
 def _current_member_cnt(mem):
     """get current member count
     """
-    return sum([len(i) for i in mem.items()])
+    c = 0
+    for i in mem.items():
+        c += len(i)
+    return c
 
 
 @bot.command()
@@ -142,28 +145,24 @@ async def party(ctx, pt_num=1, alloc_num=6):
     #         "SYNOPSYS: /party [Number of Party] [Number of Members in each Party]\n\tNumber of Party: 1~(Number of Stocked Members)\n\tNumber of Members in each Party: 1~6"
     #     )
 
-    try:
-        parties = {}
-        pools = list(stocked_mem.values())
-        pools = [list(s) for s in itertools.zip_longest(*pools)]
-        flatten_pools = [
-            item for sublist in pools for item in sublist if item is not None
-        ]
-        flatten_pools.reverse()
-        for party in range(pt_num):
-            # creating the party
-            parties[party] = []
-            for alloc in range(alloc_num):
-                if len(flatten_pools):
-                    parties[party].append(flatten_pools.pop())
-                else:
-                    break
-    except BaseException as e:
-        return await ctx.channel.send(str(e))
+    parties = {}
+    pools = list(stocked_mem.values())
+    pools = [list(s) for s in itertools.zip_longest(*pools)]
+    flatten_pools = [item for sublist in pools for item in sublist if item is not None]
+    flatten_pools.reverse()
 
-    await ctx.channel.send(
-        "パーティを編成しました。\n{result}".format(result=_get_member_list(parties))
-    )
+    for party in range(pt_num):
+        # creating the party
+        parties[party] = []
+        for alloc in range(alloc_num):
+            await ctx.channel.send(str(parties))
+            if len(flatten_pools):
+                parties[party].append(flatten_pools.pop())
+            else:
+                break
+
+    msg = "パーティを編成しました。\n{result}".format(result=_get_member_list(parties))
+    await ctx.channel.send(msg)
 
 
 """botの接続と起動"""
