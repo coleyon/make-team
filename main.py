@@ -46,7 +46,8 @@ async def clear(ctx, group=""):
     msg = "SYNOPSIS: /clear [Group]"
     if group == "":
         # all clear mode
-        stocked_mem = MEMBER_TEMPLATE.copy()
+        for k in stocked_mem.keys():
+            stocked_mem[k] = []
         msg = "メンバーリストを空にしました。\n{m}".format(m=_get_member_list(stocked_mem))
     if group in stocked_mem.keys():
         # group clear mode
