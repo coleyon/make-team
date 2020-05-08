@@ -56,10 +56,10 @@ async def clear(ctx, group=""):
 
 
 @bot.command()
-async def group(ctx, *groups):
+async def regroup(ctx, *groups):
     global stocked_mem
-    msg = "SYNOPSIS: /group <Group-1> [Group-n]"
-    if len(type):
+    msg = "SYNOPSIS: /regroup <Group-1> [Group-n]"
+    if len(groups):
         stocked_mem = dict.fromkeys(groups, [])
         msg = "グループを再作成しました。\n{cur}".format(cur=_get_member_list(stocked_mem))
     await ctx.channel.send(msg)
