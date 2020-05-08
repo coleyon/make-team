@@ -22,7 +22,7 @@ Discord上で、
 ---- 
 `/clear [Group]`
 
-* すべてまたは指定のグループから、全てのメンバーを消去する
+* すべてまたは指定のグループから、全メンバーを消去する
   * `Group`: 対象とするグループ名。省略時は全グループが対象となる。
 
 ---- 
@@ -64,9 +64,9 @@ Discord上で、
 ---- 
 `/party [Party Number] [Allocation Number]`
 
-* パーティ編成例を出力する
-  * Party Number: 編成するパーティの数
-  * Allocation Number for each Party: パーティに参加させるメンバーの数
+* パーティ編成例を出力する。予め、グループとメンバーが定義されている必要がある。
+  * Party Number: 編成するパーティの数。1~`/count`で得られるメンバー数まで。省略すると2。
+  * Allocation Number for each Party: パーティに参加させるメンバーの数。1~`/count`で得られるメンバー数まで。省略すると5。
 
 
 # Requirement

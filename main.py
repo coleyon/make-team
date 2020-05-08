@@ -35,7 +35,7 @@ async def on_ready():
 def _get_member_list(mem):
     """get formatted member list
     """
-    return "\n".join([i + "= " + ", ".join(mem[i]) for i in [k for k in mem.keys()]])
+    return "\n\t".join([i + "= " + ", ".join(mem[i]) for i in [k for k in mem.keys()]])
 
 
 @bot.command()
