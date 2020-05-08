@@ -29,7 +29,7 @@ async def on_ready():
 def _cleanup_args(args):
     params = args.strip()
     params = re.split(",| |\u3000", params)
-    return " ".join(str(x).strip for x in params)
+    return [str(x).strip for x in params]
 
 
 def _get_member_list(mem):
@@ -106,7 +106,7 @@ async def add(ctx, group, *args):
 async def count(ctx):
     global stocked_mem
     await ctx.channel.send(
-        "現在 {cnt} 名をストックしています。".format(cnt=sum(len(i) for i in stocked_mem.values()))
+        "現在 {cnt} メンバーをストックしています。".format(cnt=sum(len(i) for i in stocked_mem.values()))
     )
 
 
