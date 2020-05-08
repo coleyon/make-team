@@ -61,7 +61,7 @@ async def group(ctx, *groups):
     msg = "SYNOPSIS: /group <Group-1> [Group-n]"
     if len(type):
         stocked_mem = dict.fromkeys(groups, [])
-        msg = "グループ {groups} を作りました。".format(groups=", ".join(groups))
+        msg = "グループを再作成しました。\n{cur}".format(cur=_get_member_list(stocked_mem))
     await ctx.channel.send(msg)
 
 
@@ -74,7 +74,9 @@ async def remove(ctx, group, *members):
 
     for removal in members:
         stocked_mem[group].remove(removal)
-    msg = "{m} を {rem_from} グループから除去しました。".format(m=", ".join(members), rem_from=group)
+    msg = "{m} を {rem_from} グループから除去しました。\n{cur}".format(
+        m=", ".join(members), rem_from=group, cur=_get_member_list(stocked_mem)
+    )
     await ctx.channel.send(msg)
 
 
@@ -90,10 +92,8 @@ async def add(ctx, group, *members):
     global stocked_mem
     msg = "SYNOPSIS: /add <Group> <Member-1> [Member-n]"
     stocked_mem[group] = [*stocked_mem[group], *members]
-    msg = "メンバー {m} を {grp} に追加しました。\n{current}".format(
-        m=", ".join(stocked_mem[group]),
-        grp=group,
-        current=_get_member_list(stocked_mem),
+    msg = "メンバー {m} を {grp} に追加しました。\n{cur}".format(
+        m=", ".join(stocked_mem[group]), grp=group, cur=_get_member_list(stocked_mem)
     )
     await ctx.channel.send(msg)
 
