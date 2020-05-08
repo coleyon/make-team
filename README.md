@@ -8,7 +8,7 @@ Discord上で、
 * グループに属する形でメンバーを定義する
 * BOTに、できるだけ多くのグループからメンバーを集めたパーティを編成させる
 
-# Usage (一通りの使い方)
+# Usage
 
 1. [Discord のサーバーを作る](https://support.discord.com/hc/ja/articles/204849977-%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%AE%E4%BB%95%E6%96%B9)
 1. 以下のURLへアクセスして、このBotが作ったサーバーに入ることを許可（認証）する
@@ -29,6 +29,9 @@ Discord上で、
       サーバにBOTが入った事確認をする。
 
       <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/157638/7bafcd0c-9d00-2b49-2122-583afe83542d.jpeg">
+
+      このURLは例示のためのもので、提供保証はありません。
+      後述の Installation に沿って各自実行環境はご用意ください。
 
 # Commands
 
@@ -75,6 +78,11 @@ Discord上で、
   * Group: 対象とするグループ名。
   * Member-x: 追加したいメンバー名。スペースで区切って複数のメンバー名を指定可能。
 
+出力例:
+
+    次のようなパーティ編成はいかがでしょう。
+        Party-1= a, d, f, j, b
+        Party-2= e, g, c, h, i
 
 ---- 
 `/count`
