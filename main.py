@@ -26,10 +26,10 @@ async def on_ready():
     print("------------------------")
 
 
-def _cleanup_args(args):
-    params = args.strip()
-    params = re.split(",| |\u3000", params)
-    return [str(x).strip for x in params]
+# def _cleanup_args(args):
+#     params = args.strip()
+#     params = re.split(",| |\u3000", params)
+#     return [str(x).strip for x in params]
 
 
 def _get_member_list(mem):
@@ -56,10 +56,9 @@ async def clear(ctx, group=""):
 
 
 @bot.command()
-async def group(ctx, *args):
+async def group(ctx, *groups):
     global stocked_mem
-    groups = _cleanup_args(args)
-    msg = "SYNOPSIS: /group <Group-1>[,Group-n]"
+    msg = "SYNOPSIS: /group <Group-1> [Group-n]"
     if len(type):
         stocked_mem = dict.fromkeys(groups, [])
         msg = "グループ {groups} を作りました。".format(groups=", ".join(groups))
@@ -67,9 +66,8 @@ async def group(ctx, *args):
 
 
 @bot.command()
-async def remove(ctx, group, *args):
+async def remove(ctx, group, *members):
     global stocked_mem
-    members = _cleanup_args(args)
     msg = "SYNOPSIS: /remove <Group> <Member-1>[,Member-n]"
     if len(members) < 1:
         return await ctx.channel.send(msg)
@@ -88,11 +86,9 @@ async def show(ctx):
 
 
 @bot.command()
-async def add(ctx, group, *args):
+async def add(ctx, group, *members):
     global stocked_mem
-    members = _cleanup_args(args)
     msg = "SYNOPSIS: /add <Group> <Member-1> [Member-n]"
-
     stocked_mem[group] = [*stocked_mem[group], *members]
     msg = "メンバー {m} を {grp} に追加しました。\n{current}".format(
         m=", ".join(stocked_mem[group]),
@@ -113,7 +109,7 @@ async def count(ctx):
 @bot.command()
 async def party(ctx, pt_num=2, alloc_num=5):
     global stocked_mem
-    msg = "SYNOPSIS: /party [Party Number. 1~n, default is 2] [Member allocation Number for each Party. 1-n, default is 5.]"
+    msg = "SYNOPSIS: /party [Party Number] [Allocation Number]"
 
     parties = {}
     pools = list(stocked_mem.values())

@@ -47,9 +47,9 @@ Member-x: 追加したいメンバー名。スペースで区切って複数の�
 > 現在 10 メンバーをストックしています。
 
 * パーティ編成例を出力する
-`/party [Party Number] [Allocation Number for each Party]`
-Party Number: 編成するパーティの数。1～
-Allocation Number for each Party: 
+`/party [Party Number] [Allocation Number]`
+Party Number: 編成するパーティの数
+Allocation Number for each Party: パーティに参加させるメンバーの数
 
 
 # Requirement
