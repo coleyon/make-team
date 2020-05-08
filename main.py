@@ -4,7 +4,7 @@ import traceback
 import discord
 from discord.ext import commands
 import json
-
+import re
 
 token = os.environ["DISCORD_BOT_TOKEN"]
 bot = commands.Bot(command_prefix="/")
@@ -26,8 +26,10 @@ async def on_ready():
     print("------------------------")
 
 
-def _join_args(args):
-    return " ".join(str(x) for x in args).split(",")
+def _cleanup_args(args):
+    params = args.strip()
+    params = re.split(",| |\u3000", params)
+    return " ".join(str(x).strip for x in params)
 
 
 def _get_member_list(mem):
@@ -54,14 +56,24 @@ async def clear(ctx, group=""):
 
 
 @bot.command()
+async def group(ctx, *args):
+    global stocked_mem
+    groups = _cleanup_args(args)
+    msg = "SYNOPSIS: /group <Group-1>[,Group-n]"
+    if len(type):
+        stocked_mem = dict.fromkeys(groups, [])
+        msg = "グループ {groups} を作りました。".format(groups=", ".join(groups))
+    await ctx.channel.send(msg)
+
+
+@bot.command()
 async def remove(ctx, group, *args):
     global stocked_mem
-    params = _join_args(args)
+    members = _cleanup_args(args)
     msg = "SYNOPSIS: /remove <Group> <Member-1>[,Member-n]"
-    if len(params) < 1:
+    if len(members) < 1:
         return await ctx.channel.send(msg)
 
-    members = params
     for removal in members:
         stocked_mem[group].remove(removal)
     msg = "{m} を {rem_from} グループから除去しました。".format(m=", ".join(members), rem_from=group)
@@ -78,9 +90,10 @@ async def show(ctx):
 @bot.command()
 async def add(ctx, group, *args):
     global stocked_mem
-    msg = "SYNOPSYS: /add <Group> <Member-1>[,Member-n]"
+    members = _cleanup_args(args)
+    msg = "SYNOPSIS: /add <Group> <Member-1> [Member-n]"
 
-    stocked_mem[group] = [*stocked_mem[group], *args]
+    stocked_mem[group] = [*stocked_mem[group], *members]
     msg = "メンバー {m} を {grp} に追加しました。\n{current}".format(
         m=", ".join(stocked_mem[group]),
         grp=group,
@@ -92,15 +105,15 @@ async def add(ctx, group, *args):
 @bot.command()
 async def count(ctx):
     global stocked_mem
-    c = 0
-    for i in stocked_mem.values():
-        c += len(i)
-    await ctx.channel.send("現在{cnt}名をストックしています。".foramt(cnt=str(c)))
+    await ctx.channel.send(
+        "現在 {cnt} 名をストックしています。".format(cnt=sum(len(i) for i in stocked_mem.values()))
+    )
 
 
 @bot.command()
-async def party(ctx, pt_num=1, alloc_num=6):
+async def party(ctx, pt_num=2, alloc_num=5):
     global stocked_mem
+    msg = "SYNOPSIS: /party [Party Number. 1~n, default is 2] [Member allocation Number for each Party. 1-n, default is 5.]"
 
     parties = {}
     pools = list(stocked_mem.values())
@@ -116,11 +129,10 @@ async def party(ctx, pt_num=1, alloc_num=6):
             if len(flatten_pools):
                 parties[key].append(flatten_pools.pop())
 
-    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(
-        res=json.dumps(parties, indent=4, sort_keys=True)
-    )
+    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
+
     await ctx.channel.send(msg)
 
 
-"""botの接続と起動"""
+# start and connecting to the discord bot.
 bot.run(token)
