@@ -13,26 +13,6 @@ Discord上で、
 [ ]は任意入力, <>は必須入力パラメータです。
 
 ---- 
-`/regroup <Group-1> [Group-n]`
-
-* グループを再定義する。
-  * `Group-x`: グループ名。スペースで区切って複数のグループを指定可能。
-  全てのグループとメンバーが消去され、指定したグループが作られます。
-
----- 
-`/clear [Group]`
-
-* すべてまたは指定のグループから、全メンバーを消去する
-  * `Group`: 対象とするグループ名。省略時は全グループが対象となる。
-
----- 
-`/remove <Group> <Member-1> [Member-n]`
-
-* 指定したグループから、指定したメンバーを消去する
-  * Group: 対象とするグループ名。
-  * Member-x: 消去したいメンバー名。スペースで区切って複数のメンバー名を指定可能。
-
----- 
 `/show`
 
 * 現在のグループとメンバーの定義状態を見る
@@ -46,6 +26,55 @@ Discord上で、
     support= f, g, h, i
     bench= j
 
+
+---- 
+`/regroup <Group-1> [Group-n]`
+
+* グループを再定義する。
+  * `Group-x`: グループ名。スペースで区切って複数のグループを指定可能。
+  全てのグループとメンバーが消去され、指定したグループが作られます。
+
+
+出力例:
+
+    /regroup 壁 火力 支援 お座り
+    グループを再作成しました。
+    壁= 
+    火力= 
+    支援= 
+    お座り=
+
+---- 
+`/clear [Group]`
+
+* すべてまたは指定のグループから、全メンバーを消去する
+  * `Group`: 対象とするグループ名。省略時は全グループが対象となる。
+
+出力例:
+
+    /clear defense
+    defense グループのメンバーリストを空にしました。
+    defense=
+    attack= d, e
+    support= f, g, h, i
+    bench= j
+
+---- 
+`/remove <Group> <Member-1> [Member-n]`
+
+* 指定したグループから、指定したメンバーを消去する
+  * Group: 対象とするグループ名。
+  * Member-x: 消去したいメンバー名。スペースで区切って複数のメンバー名を指定可能。
+
+出力例:
+
+    /remove defense c
+    c を defense グループから除去しました。
+    defense= a, b
+    attack= d, e
+    support= f, g, h, i
+    bench= j
+
 ---- 
 `/add <Group> <Member-1> [Member-n]`
 
@@ -55,9 +84,12 @@ Discord上で、
 
 出力例:
 
-    次のようなパーティ編成はいかがでしょう。
-        Party-1= a, d, f, j, b
-        Party-2= e, g, c, h, i
+    /add defense Z
+    メンバー Z を defense に追加しました。
+    defense= a, b, c, Z
+    attack= d, e
+    support= f, g, h, i
+    bench= j
 
 ---- 
 `/count`
@@ -77,8 +109,13 @@ Discord上で、
 
 出力例:
 
-  /party
-  次のようなパーティ編成はいかがでしょう。
+      /party
+      次のようなパーティ編成はいかがでしょう。
+      Party-1= a, d, f, j, b
+      Party-2= e, g, c, h, i
+
+      /party 2 5
+      次のようなパーティ編成はいかがでしょう。
       Party-1= a, d, f, j, b
       Party-2= e, g, c, h, i
 

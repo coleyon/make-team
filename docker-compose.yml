@@ -1,0 +1,11 @@
+version: "3"
+services:
+  discord-bot:
+    restart: always
+    build: .
+#     volumes:
+#       - sqlite-data:/app/data
+
+# volumes:
+#   sqlite-data:
+#     driver: local
