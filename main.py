@@ -164,18 +164,20 @@ async def man(ctx):
 
 @bot.command()
 async def here(ctx):
-    await ctx.channel.send(
-        "gid: {gid}\ncid: {cid} \nmyid: {uid}\nyourid: {aid}".format(
-            gid=ctx.guild.id, cid=ctx.channel.id, uid=bot.user.id, aid=ctx.auther.id
-        )
-    )
+    await ctx.channel.send(ctx.channel.id)
+    # await ctx.channel.send(
+    #     "gid: {gid}\ncid: {cid} \nmyid: {uid}\nyourid: {aid}".format(
+    #         gid=ctx.guild.id, cid=ctx.channel.id, uid=bot.user.id, aid=ctx.auther.id
+    #     )
+    # )
 
 
 @bot.command()
 async def mylastpost(ctx):
-    async for message in ctx.channel.history(limit=20):
-        if message.auther == bot.user:
-            await ctx.channel.send("my latest post is:\n{post}".format(post=message))
+    await ctx.channel.send(len(ctx.channel.history(limit=3)))
+    # async for message in ctx.channel.history(limit=20):
+    #     if message.auther == bot.user:
+    #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
 # async def reply(message):
