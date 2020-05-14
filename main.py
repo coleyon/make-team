@@ -43,8 +43,8 @@ HELP = """
         例: /remove 壁 Aさん Bさん
     /count
         現在のメンバーの定義数を見る
-    /help
-        このヘルプを出力する
+    /man
+        マニュアルを出力する
 """
 
 
@@ -158,7 +158,7 @@ async def party(ctx, pt_num=2, alloc_num=5):
     await ctx.channel.send(msg)
 
 
-@bot.command(name="help")
+@bot.command()
 async def man(ctx):
     await ctx.channel.send(HELP)
 
