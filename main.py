@@ -6,7 +6,7 @@ from discord.ext import commands
 import json
 import re
 
-command_prefix = "#" if os.environ["DEBUG"] == "1" else "/"
+command_prefix = "#" if os.getenv("DEBUG", default=False) else "/"
 token = os.environ["DISCORD_BOT_TOKEN"]
 bot = commands.Bot(command_prefix=command_prefix)
 MEMBER_TEMPLATE = {"支援": [], "壁": [], "超火力": [], "火力": [], "サポーター": []}
