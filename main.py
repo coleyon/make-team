@@ -3,7 +3,6 @@ import itertools
 import traceback
 import discord
 from discord.ext import commands
-from discord import client
 import json
 import re
 
@@ -174,18 +173,18 @@ async def here(ctx):
 
 @bot.command()
 async def mylastpost(ctx):
-    await ctx.channel.send("my latest post is:\n{post}".format(post=""))
+    async for message in ctx.channel.history(limit=20):
+        if message.auther == bot.user:
+            await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
-async def reply(message):
-    reply = f"{message.author.mention} 返信テスト。呼んだ？"
-    await message.channel.send(reply)
-
-
-@client.event
-async def on_message(message):
-    if client.user in message.mentions:
-        await reply(message)
+# async def reply(message):
+#     reply = f"{message.author.mention} 返信テスト。呼んだ？"
+#     await message.channel.send(reply)
+# @client.event
+# async def on_message(message):
+#     if client.user in message.mentions:
+#         await reply(message)
 
 
 # start and connecting to the discord bot.
