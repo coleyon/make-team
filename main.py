@@ -3,11 +3,11 @@ import itertools
 import traceback
 import discord
 from discord.ext import commands
+from discord import client
 import json
 import re
 
 command_prefix = "#" if os.getenv("DEBUG", default=False) else "/"
-token = os.environ["DISCORD_BOT_TOKEN"]
 bot = commands.Bot(command_prefix=command_prefix)
 MEMBER_TEMPLATE = {"支援": [], "壁": [], "超火力": [], "火力": [], "サポーター": []}
 stocked_mem = MEMBER_TEMPLATE.copy()
@@ -43,7 +43,7 @@ HELP = """
         例: /remove 壁 Aさん Bさん
     /count
         現在のメンバーの定義数を見る
-    /man
+    /help
         このヘルプを出力する
 """
 
@@ -158,10 +158,35 @@ async def party(ctx, pt_num=2, alloc_num=5):
     await ctx.channel.send(msg)
 
 
-@bot.command()
+@bot.command(name="help")
 async def man(ctx):
     await ctx.channel.send(HELP)
 
 
+@bot.command()
+async def here(ctx):
+    await ctx.channel.send(
+        "gid: {gid}\ncid: {cid} \nmyid: {uid}\nyourid: {aid}".format(
+            gid=ctx.guild.id, cid=ctx.channel.id, uid=bot.user.id, aid=ctx.auther.id
+        )
+    )
+
+
+@bot.command()
+async def mylastpost(ctx):
+    await ctx.channel.send("my latest post is:\n{post}".format(post=""))
+
+
+async def reply(message):
+    reply = f"{message.author.mention} 返信テスト。呼んだ？"
+    await message.channel.send(reply)
+
+
+@client.event
+async def on_message(message):
+    if client.user in message.mentions:
+        await reply(message)
+
+
 # start and connecting to the discord bot.
-bot.run(token)
+bot.run(os.environ["DISCORD_BOT_TOKEN"])
