@@ -6,7 +6,7 @@ from discord.ext import commands
 import json
 import re
 
-command_prefix = "#" if os.getenv("DEBUG", default=False) else "/"
+command_prefix = "$" if os.getenv("DEBUG", default=False) else "/"
 bot = commands.Bot(command_prefix=command_prefix)
 MEMBER_TEMPLATE = {"支援": [], "壁": [], "超火力": [], "火力": [], "サポーター": []}
 stocked_mem = MEMBER_TEMPLATE.copy()
@@ -174,7 +174,8 @@ async def here(ctx):
 
 @bot.command()
 async def mylastpost(ctx):
-    await ctx.channel.send(len(ctx.channel.history(limit=3)))
+    async for msg in ctx.channel.history(limit=3):
+        await ctx.channel.send(msg.content)
     # async for message in ctx.channel.history(limit=20):
     #     if message.auther == bot.user:
     #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
