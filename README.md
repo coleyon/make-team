@@ -91,6 +91,7 @@ Discord上で、
     support= f, g, h, i
     bench= j
 
+
 ---- 
 `/count`
 * 現在のメンバーの定義数を見る
@@ -113,7 +114,6 @@ Discord上で、
       次のようなパーティ編成はいかがでしょう。
       Party-1= a, d, f, j, b
       Party-2= e, g, c, h, i
-
       /party 2 5
       次のようなパーティ編成はいかがでしょう。
       Party-1= a, d, f, j, b

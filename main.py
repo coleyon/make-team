@@ -6,15 +6,46 @@ from discord.ext import commands
 import json
 import re
 
+command_prefix = "#" if os.environ["DEBUG"] == "1" else "/"
 token = os.environ["DISCORD_BOT_TOKEN"]
-bot = commands.Bot(command_prefix="/")
-MEMBER_TEMPLATE = {"defense": [], "attack": [], "support": [], "bench": []}
-stocked_mem = {
-    "defense": ["a", "b", "c"],
-    "attack": ["d", "e"],
-    "support": ["f", "g", "h", "i"],
-    "bench": ["j"],
-}
+bot = commands.Bot(command_prefix=command_prefix)
+MEMBER_TEMPLATE = {"支援": [], "壁": [], "超火力": [], "火力": [], "サポーター": []}
+stocked_mem = MEMBER_TEMPLATE.copy()
+HELP = """
+概略:
+    指定したグループとメンバーからパーティ編成例を作る。
+    パーティは、できるだけ各グループから均等にメンバーを抜き出して編成される。
+
+使い方:
+    以下が最小限の使い方です。
+    1. グループを定義する (/regroup)
+    2. 各グループにユーザーを追加する (/add)
+    3. パーティ編成例を出力する (/party)
+
+コマンド:
+    < >=必須入力, [=y]=任意入力。省略した場合はyを指定する事と同じ意味になる
+    /show
+        現在のグループとメンバーの定義状態を見る
+    /regroup <Group-1> [Group-n]
+        すべてのグループとメンバーを抹消し、グループを再定義する
+        例: /regroup 壁 火力 支援 お座り
+    /add <Group> <Member-1> [Member-n]
+        指定したグループにメンバーを追加する
+        例: /add 壁 Aさん Bさん
+    /party [<Party Number=2> [Allocation Number=5]]
+        パーティ編成例を出力する
+        例: /party
+    /clear [Group=すべてのグループ]
+        すべてのグループまたは指定のグループから、全メンバーを消去する
+        例: /clear 壁
+    /remove <Group> <Member-1> [Member-n]
+        指定したグループから、指定したメンバーを消去する
+        例: /remove 壁 Aさん Bさん
+    /count
+        現在のメンバーの定義数を見る
+    /man
+        このヘルプを出力する
+"""
 
 
 @bot.event
@@ -24,12 +55,6 @@ async def on_ready():
     print(bot.user.id)
     print(discord.__version__)
     print("------------------------")
-
-
-# def _cleanup_args(args):
-#     params = args.strip()
-#     params = re.split(",| |\u3000", params)
-#     return [str(x).strip for x in params]
 
 
 def _get_member_list(mem):
@@ -131,6 +156,11 @@ async def party(ctx, pt_num=2, alloc_num=5):
     msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
 
     await ctx.channel.send(msg)
+
+
+@bot.command()
+async def man(ctx):
+    await ctx.channel.send(HELP)
 
 
 # start and connecting to the discord bot.
