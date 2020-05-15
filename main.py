@@ -181,6 +181,11 @@ async def mylastpost(ctx):
     #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
+@bot.command()
+async def echo(ctx, *msg):
+    await ctx.channel.send(" ".join(msg))
+
+
 # async def reply(message):
 #     reply = f"{message.author.mention} 返信テスト。呼んだ？"
 #     await message.channel.send(reply)
