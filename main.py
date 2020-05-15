@@ -6,6 +6,7 @@ from discord.ext import commands
 import json
 import re
 
+client = discord.Client()
 command_prefix = "$" if os.getenv("DEBUG", default=False) else "/"
 bot = commands.Bot(command_prefix=command_prefix)
 MEMBER_TEMPLATE = {"支援": [], "壁": [], "超火力": [], "火力": [], "サポーター": []}
@@ -186,13 +187,15 @@ async def echo(ctx, *msg):
     await ctx.channel.send(" ".join(msg))
 
 
-# async def reply(message):
-#     reply = f"{message.author.mention} 返信テスト。呼んだ？"
-#     await message.channel.send(reply)
-# @client.event
-# async def on_message(message):
-#     if client.user in message.mentions:
-#         await reply(message)
+async def reply(message):
+    reply = f"{message.author.mention} 返信テスト。呼んだ？"
+    await message.channel.send(reply)
+
+
+@client.event
+async def on_message(message):
+    if client.user in message.mentions:
+        await reply(message)
 
 
 # start and connecting to the discord bot.
