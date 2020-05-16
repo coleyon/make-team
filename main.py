@@ -189,7 +189,7 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_message(message):
-    if bot.user == message.auther:
+    if bot.user == message.author:
         await message.channel.send("自分の発言にはオウム返ししないテスト")
     else:
         await message.channel.send("オウム返しテスト\n" + message.content)
