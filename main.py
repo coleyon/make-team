@@ -185,6 +185,7 @@ async def mylastpost(ctx):
 async def on_message(message):
     if message.author == client.user:
         return
+    print("オウム返してすと\n" + message.content)
     await message.channel.send("オウム返してすと\n" + message.content)
 
 
