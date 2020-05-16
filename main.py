@@ -182,28 +182,17 @@ async def mylastpost(ctx):
     #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
-# @bot.on_command_error
-# async def on_command_error(ctx, error):
-#     await ctx.channel.send(str(error))
+@bot.event
+async def on_command_error(ctx, error):
+    await ctx.channel.send(str(error))
 
 
-@bot.on_message
+@bot.event
 async def on_message(message):
-    await message.channel.send(message.content)
-
-
-# > @client.event
-# > async def on_ready():
-# >     print("We have logged in as {0.user}".format(client))
-# >
-# >
-# > @client.event
-# > async def on_message(message):
-# >     if message.author == client.user:
-# >         return
-# >     else:
-# >         await message.channel.send(message.content)
-# client.run(os.environ["DISCORD_BOT_TOKEN"])
+    if bot.user == message.auther:
+        await message.channel.send("自分の発言にはオウム返ししないテスト")
+    else:
+        await message.channel.send("オウム返しテスト\n" + message.content)
 
 
 bot.run(os.environ["DISCORD_BOT_TOKEN"])
