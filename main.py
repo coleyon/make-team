@@ -182,12 +182,12 @@ async def mylastpost(ctx):
     #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
-@bot.on_command_error(exception)
-async def on_command_error(ctx, exception):
-    await ctx.channel.send(str(exception))
+# @bot.on_command_error
+# async def on_command_error(ctx, error):
+#     await ctx.channel.send(str(error))
 
 
-@bot.on_message(message)
+@bot.on_message
 async def on_message(message):
     await message.channel.send(message.content)
 
