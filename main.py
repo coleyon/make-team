@@ -194,9 +194,7 @@ async def reply(message):
 
 @client.event
 async def on_message(message):
-    if client.user in message.mentions:
-        await reply(message)
+    await reply("オウム返しテスト\n" + message)
 
 
-# start and connecting to the discord bot.
 bot.run(os.environ["DISCORD_BOT_TOKEN"])
