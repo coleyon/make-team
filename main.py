@@ -182,12 +182,17 @@ stocked_mem = MEMBER_TEMPLATE.copy()
 #     #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
-@client.async_event
+@client.event
+async def on_ready():
+    print("We have logged in as {0.user}".format(client))
+
+
+@client.event
 async def on_message(message):
-    print("オウム返してすと\n" + message.content)
     if message.author == client.user:
         return
-    await message.channel.send("オウム返してすと\n" + message.content)
+    else:
+        await message.channel.send(message.content)
 
 
 # bot.run(os.environ["DISCORD_BOT_TOKEN"])
