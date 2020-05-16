@@ -1,6 +1,5 @@
 import os
 import itertools
-import traceback
 import discord
 from discord.ext import commands
 import json
@@ -184,9 +183,9 @@ async def mylastpost(ctx):
 
 @client.event
 async def on_message(message):
-    if client.user != message.author:
-        reply = "オウム返しテスト\n" + message.content
-        await client.send_message(message.channel, reply)
+    if message.author == client.user:
+        return
+    await message.channel.send("オウム返してすと\n" + message.content)
 
 
 bot.run(os.environ["DISCORD_BOT_TOKEN"])
