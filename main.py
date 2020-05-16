@@ -203,7 +203,7 @@ async def on_message(message):
 # >         return
 # >     else:
 # >         await message.channel.send(message.content)
+# client.run(os.environ["DISCORD_BOT_TOKEN"])
 
 
-# bot.run(os.environ["DISCORD_BOT_TOKEN"])
-client.run(os.environ["DISCORD_BOT_TOKEN"])
+bot.run(os.environ["DISCORD_BOT_TOKEN"])
