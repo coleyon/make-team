@@ -182,7 +182,7 @@ stocked_mem = MEMBER_TEMPLATE.copy()
 #     #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
-@client.event
+@client.async_event
 async def on_message(message):
     print("オウム返してすと\n" + message.content)
     if message.author == client.user:
