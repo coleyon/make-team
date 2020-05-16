@@ -10,6 +10,7 @@ command_prefix = "$" if os.getenv("DEBUG", default=False) else "/"
 bot = commands.Bot(command_prefix=command_prefix)
 MEMBER_TEMPLATE = {"支援": [], "壁": [], "超火力": [], "火力": [], "サポーター": []}
 stocked_mem = MEMBER_TEMPLATE.copy()
+
 HELP = """
 概略:
     指定したグループとメンバーからパーティ編成例を作る。
@@ -183,10 +184,11 @@ async def mylastpost(ctx):
 
 @client.event
 async def on_message(message):
+    print("オウム返してすと\n" + message.content)
     if message.author == client.user:
         return
-    print("オウム返してすと\n" + message.content)
     await message.channel.send("オウム返してすと\n" + message.content)
 
 
 bot.run(os.environ["DISCORD_BOT_TOKEN"])
+client.run(os.environ["DISCORD_BOT_TOKEN"])
