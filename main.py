@@ -5,10 +5,15 @@ from discord.ext import commands
 import json
 import re
 
-# client = discord.Client()
 command_prefix = "$" if os.getenv("DEBUG", default=False) else "/"
 bot = commands.Bot(command_prefix=command_prefix)
-MEMBER_TEMPLATE = {"支援": [], "壁": [], "超火力": [], "火力": [], "サポーター": []}
+MEMBER_TEMPLATE_FILE = "default_grouping.json"
+MEMBER_TEMPLATE = {}
+if os.path.exists(MEMBER_TEMPLATE_FILE):
+    with open(MEMBER_TEMPLATE_FILE) as f:
+        MEMBER_TEMPLATE = json.load(f)
+# TODO  stocked_mem を global 変数ではなくkv storeなどにする。
+#       ギルドおよびチャンネルID間で混同しないよう分離する。セキュリティを考慮する。
 stocked_mem = MEMBER_TEMPLATE.copy()
 
 HELP = """
@@ -154,7 +159,6 @@ async def party(ctx, pt_num=2, alloc_num=5):
                 parties[key].append(flatten_pools.pop())
 
     msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
-
     await ctx.channel.send(msg)
 
 

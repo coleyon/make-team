@@ -121,10 +121,10 @@ Discord上で、
 
 # Requirement
 
-* Python 3.7.3 >=
+* Python 3.7 >=
 * discord.py 1.3.3
 
-# Installation
+# Installation for heroku
 
 1. [Discord のサーバーを作る](https://support.discord.com/hc/ja/articles/204849977-%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%AE%E4%BB%95%E6%96%B9)
 1. このリポジトリをフォークして、ローカルまたは[Herokuなどにデプロイする](https://qiita.com/1ntegrale9/items/aa4b373e8895273875a8)
@@ -148,6 +148,12 @@ Discord上で、
 
       <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/157638/7bafcd0c-9d00-2b49-2122-583afe83542d.jpeg">
 
+
+# Installation for docker
+
+1. docker サーバを立てる
+1. docker サーバ上にこのリポジトリを clone する
+1. `docker-compose up -d` する
 
 # Reference
 

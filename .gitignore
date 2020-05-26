@@ -1,6 +1,3 @@
-/Pipfile
-/Pipfile.lock
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -65,8 +62,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-# https://qiita.com/matsuoshi/items/0767198c17d4d0f3c22d
-doc/_build/*
+# doc/_build/*
 # !doc/_build/_static
 # doc/_build/_static/*
 # !doc/_build/_static/css
@@ -113,10 +109,10 @@ doc/output/**
 # visual studio code project file.
 .vscode
 
-# terminator project operational env requirements
-app/Pipfile
-app/Pipfile.lock
-oracle*.deb
+# envfile
+.env
+*.code-workspace
+
 
 .pytest_cache/
 .coverage

@@ -3,9 +3,6 @@ services:
   discord-bot:
     restart: always
     build: .
-#     volumes:
-#       - sqlite-data:/app/data
-
-# volumes:
-#   sqlite-data:
-#     driver: local
+  environment: 
+    DEBUG: 0
+    DISCORD_BOT_TOKEN: "TOKEN_OF_YOUR_DISCORD_BOT"
