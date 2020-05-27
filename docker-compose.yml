@@ -3,6 +3,6 @@ services:
   discord-bot:
     restart: always
     build: .
-  environment: 
-    DEBUG: 0
-    DISCORD_BOT_TOKEN: "TOKEN_OF_YOUR_DISCORD_BOT"
+    environment: 
+      DEBUG: 0
+      DISCORD_BOT_TOKEN: "TOKEN_OF_YOUR_DISCORD_BOT"

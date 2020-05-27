@@ -4,62 +4,41 @@ import discord
 from discord.ext import commands
 import json
 import re
+from lib.defs import HELP
 
 command_prefix = "$" if os.getenv("DEBUG", default=False) else "/"
 bot = commands.Bot(command_prefix=command_prefix)
 MEMBER_TEMPLATE_FILE = "default_grouping.json"
+SAVEFILE = "savefile.json"
 MEMBER_TEMPLATE = {}
-if os.path.exists(MEMBER_TEMPLATE_FILE):
-    with open(MEMBER_TEMPLATE_FILE) as f:
-        MEMBER_TEMPLATE = json.load(f)
-# TODO  stocked_mem を global 変数ではなくkv storeなどにする。
-#       ギルドおよびチャンネルID間で混同しないよう分離する。セキュリティを考慮する。
 stocked_mem = MEMBER_TEMPLATE.copy()
-
-HELP = """
-概略:
-    指定したグループとメンバーからパーティ編成例を作る。
-    パーティは、できるだけ各グループから均等にメンバーを抜き出して編成される。
-
-使い方:
-    以下が最小限の使い方です。
-    1. グループを定義する (/regroup)
-    2. 各グループにユーザーを追加する (/add)
-    3. パーティ編成例を出力する (/party)
-
-コマンド:
-    < >=必須入力, [=y]=任意入力。省略した場合はyを指定する事と同じ意味になる
-    /show
-        現在のグループとメンバーの定義状態を見る
-    /regroup <Group-1> [Group-n]
-        すべてのグループとメンバーを抹消し、グループを再定義する
-        例: /regroup 壁 火力 支援 お座り
-    /add <Group> <Member-1> [Member-n]
-        指定したグループにメンバーを追加する
-        例: /add 壁 Aさん Bさん
-    /party [<Party Number=2> [Allocation Number=5]]
-        パーティ編成例を出力する
-        例: /party
-    /clear [Group=すべてのグループ]
-        すべてのグループまたは指定のグループから、全メンバーを消去する
-        例: /clear 壁
-    /remove <Group> <Member-1> [Member-n]
-        指定したグループから、指定したメンバーを消去する
-        例: /remove 壁 Aさん Bさん
-    /count
-        現在のメンバーの定義数を見る
-    /man
-        マニュアルを出力する
-"""
 
 
 @bot.event
 async def on_ready():
+    global MEMBER_TEMPLATE, stocked_mem
     print("-----Logged in info-----")
     print(bot.user.name)
     print(bot.user.id)
     print(discord.__version__)
+    if os.path.exists(MEMBER_TEMPLATE_FILE):
+        with open(MEMBER_TEMPLATE_FILE, "rb") as f:
+            MEMBER_TEMPLATE = json.load(f)
+            print("member templatefile loaded.")
+    if os.path.exists(SAVEFILE):
+        with open(SAVEFILE, "rb") as f:
+            stocked_mem = json.load(f)
+            print("savefile loaded.")
     print("------------------------")
+
+
+@bot.event
+async def on_disconnect():
+    global stocked_mem
+    if os.path.exists(SAVEFILE):
+        with open(SAVEFILE) as f:
+            json.dump(stocked_mem, f)
+            print("{file} saved.".format(file=SAVEFILE))
 
 
 def _get_member_list(mem):
@@ -139,62 +118,62 @@ async def count(ctx):
     )
 
 
-@bot.command()
-async def party(ctx, pt_num=2, alloc_num=5):
-    global stocked_mem
-    msg = "SYNOPSIS: /party [Party Number] [Allocation Number]"
+# @bot.command()
+# async def party(ctx, pt_num=2, alloc_num=5):
+#     global stocked_mem
+#     msg = "SYNOPSIS: /party [Party Number] [Allocation Number]"
 
-    parties = {}
-    pools = list(stocked_mem.values())
-    pools = [list(s) for s in itertools.zip_longest(*pools)]
-    flatten_pools = [item for sublist in pools for item in sublist if item is not None]
-    flatten_pools.reverse()
+#     parties = {}
+#     pools = list(stocked_mem.values())
+#     pools = [list(s) for s in itertools.zip_longest(*pools)]
+#     flatten_pools = [item for sublist in pools for item in sublist if item is not None]
+#     flatten_pools.reverse()
 
-    for party in range(pt_num):
-        # creating the party
-        key = "Party-" + str(party + 1)
-        parties[key] = []
-        for alloc in range(alloc_num):
-            if len(flatten_pools):
-                parties[key].append(flatten_pools.pop())
+#     for party in range(pt_num):
+#         # creating the party
+#         key = "Party-" + str(party + 1)
+#         parties[key] = []
+#         for alloc in range(alloc_num):
+#             if len(flatten_pools):
+#                 parties[key].append(flatten_pools.pop())
 
-    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
-    await ctx.channel.send(msg)
-
-
-@bot.command()
-async def man(ctx):
-    await ctx.channel.send(HELP)
+#     msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
+#     await ctx.channel.send(msg)
 
 
-@bot.command()
-async def here(ctx):
-    await ctx.channel.send(ctx.channel.id)
-    # await ctx.channel.send(
-    #     "gid: {gid}\ncid: {cid} \nmyid: {uid}\nyourid: {aid}".format(
-    #         gid=ctx.guild.id, cid=ctx.channel.id, uid=bot.user.id, aid=ctx.auther.id
-    #     )
-    # )
+# @bot.command()
+# async def man(ctx):
+#     await ctx.channel.send(HELP)
 
 
-@bot.command()
-async def mylastpost(ctx):
-    async for msg in ctx.channel.history(limit=3):
-        await ctx.channel.send(msg.content)
-    # async for message in ctx.channel.history(limit=20):
-    #     if message.auther == bot.user:
-    #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
+# @bot.command()
+# async def here(ctx):
+#     await ctx.channel.send(ctx.channel.id)
+#     # await ctx.channel.send(
+#     #     "gid: {gid}\ncid: {cid} \nmyid: {uid}\nyourid: {aid}".format(
+#     #         gid=ctx.guild.id, cid=ctx.channel.id, uid=bot.user.id, aid=ctx.auther.id
+#     #     )
+#     # )
 
 
-@bot.event
-async def on_command_error(ctx, error):
-    await ctx.channel.send(str(error))
+# @bot.command()
+# async def mylastpost(ctx):
+#     async for msg in ctx.channel.history(limit=3):
+#         await ctx.channel.send(msg.content)
+#     # async for message in ctx.channel.history(limit=20):
+#     #     if message.auther == bot.user:
+#     #         await ctx.channel.send("my latest post is:\n{post}".format(post=message))
 
 
-@bot.event
-async def on_message(message):
-    if bot.user != message.author:
-        await message.channel.send("オウム返しテスト\n" + message.content)
+# @bot.event
+# async def on_command_error(ctx, error):
+#     await ctx.channel.send(str(error))
+
+
+# @bot.event
+# async def on_message(message):
+#     if bot.user != message.author:
+#         await message.channel.send("オウム返しテスト\n" + message.content)
 
 
 bot.run(os.environ["DISCORD_BOT_TOKEN"])
