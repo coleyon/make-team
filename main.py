@@ -16,7 +16,7 @@ stocked_mem = MEMBER_TEMPLATE.copy()
 
 @bot.event
 async def on_ready():
-    global MEMBER_TEMPLATE, stocked_mem
+    global SAVEFILE, MEMBER_TEMPLATE, stocked_mem
     print("-----Logged in info-----")
     print(bot.user.name)
     print(bot.user.id)
@@ -34,11 +34,10 @@ async def on_ready():
 
 @bot.event
 async def on_disconnect():
-    global stocked_mem
-    if os.path.exists(SAVEFILE):
-        with open(SAVEFILE) as f:
-            json.dump(stocked_mem, f)
-            print("{file} saved.".format(file=SAVEFILE))
+    global SAVEFILE, stocked_mem
+    with open(SAVEFILE, "wb") as f:
+        json.dump(stocked_mem, f)
+        print("{file} saved.".format(file=SAVEFILE))
 
 
 def _get_member_list(mem):
