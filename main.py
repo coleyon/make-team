@@ -1,8 +1,8 @@
 import os
 import itertools
+import json
 import discord
 from discord.ext import commands
-import json
 import re
 from lib.defs import HELP
 
@@ -27,7 +27,10 @@ async def on_ready():
             print("member templatefile loaded.")
     if os.path.exists(SAVEFILE):
         with open(SAVEFILE, "r") as f:
-            stocked_mem = json.load(f)
+            try:
+                stocked_mem = json.load(f)
+            except json.decoder.JSONDecodeError:
+                stocked_mem = {}
             print("savefile loaded.")
     print("------------------------")
 
