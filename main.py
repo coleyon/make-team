@@ -9,7 +9,7 @@ from lib.defs import HELP
 command_prefix = "$" if os.getenv("DEBUG", default=False) else "/"
 bot = commands.Bot(command_prefix=command_prefix)
 MEMBER_TEMPLATE_FILE = "default_grouping.json"
-SAVEFILE = "savefile.json"
+SAVEFILE = "./data/savefile.json"
 MEMBER_TEMPLATE = {}
 stocked_mem = MEMBER_TEMPLATE.copy()
 
@@ -29,9 +29,9 @@ async def on_ready():
         with open(SAVEFILE, "r") as f:
             try:
                 stocked_mem = json.load(f)
-            except json.decoder.JSONDecodeError:
+                print("savefile loaded.")
+            except BaseException:
                 stocked_mem = {}
-            print("savefile loaded.")
     print("------------------------")
 
 
