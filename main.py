@@ -26,7 +26,7 @@ async def on_ready():
             MEMBER_TEMPLATE = json.load(f)
             print("member templatefile loaded.")
     if os.path.exists(SAVEFILE):
-        with open(SAVEFILE, "rb") as f:
+        with open(SAVEFILE, "r") as f:
             stocked_mem = json.load(f)
             print("savefile loaded.")
     print("------------------------")
