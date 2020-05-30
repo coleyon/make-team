@@ -32,7 +32,6 @@ async def on_ready():
                 print("savefile loaded.")
             except BaseException:
                 stocked_mem = {}
-    print("Command prefix is {pref}".format(pref=command_prefix))
     print("------------------------")
 
 
@@ -142,6 +141,15 @@ async def party(ctx, pt_num=2, alloc_num=5):
 
     msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
     await ctx.channel.send(msg)
+
+
+@bot.command()
+async def save(ctx):
+    global SAVEFILE, stocked_mem
+    with open(SAVEFILE, "wb") as f:
+        json.dump(stocked_mem, f)
+        print("{file} saved.".format(file=SAVEFILE))
+    await ctx.channel.send("現在のグループとメンバーをセーブしました。")
 
 
 @bot.command()
