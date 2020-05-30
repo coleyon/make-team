@@ -27,12 +27,12 @@ async def on_ready():
     if os.path.exists(MEMBER_TEMPLATE_FILE):
         with open(MEMBER_TEMPLATE_FILE, "r", encoding=ENCODING) as f:
             MEMBER_TEMPLATE = json.load(f)
-            print("member templatefile loaded.")
+            print("member template loaded.")
     if os.path.exists(SAVEFILE):
         with open(SAVEFILE, "r", encoding=ENCODING) as f:
             try:
                 stocked_mem = json.load(f)
-                print("savefile loaded.")
+                print("{file} loaded.".format(file=SAVEFILE))
             except BaseException:
                 stocked_mem = {}
     print("------------------------")
@@ -159,9 +159,9 @@ async def save(ctx):
 async def load(ctx):
     global SAVEFILE, stocked_mem
     with open(SAVEFILE, "r", encoding=ENCODING) as f:
-        json.load(stocked_mem, f)
-        print("{file} saved.".format(file=SAVEFILE))
-    await ctx.channel.send("現在のグループとメンバーをセーブしました。")
+        stocked_mem = json.load(f)
+        print("{file} loaded.".format(file=SAVEFILE))
+    await ctx.channel.send("グループとメンバーをロードしました。")
 
 
 @bot.command()
