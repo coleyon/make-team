@@ -17,6 +17,7 @@ stocked_mem = MEMBER_TEMPLATE.copy()
 @bot.event
 async def on_ready():
     global SAVEFILE, MEMBER_TEMPLATE, stocked_mem
+    print(HELP)
     print("-----Logged in info-----")
     print(bot.user.name)
     print(bot.user.id)
@@ -120,32 +121,32 @@ async def count(ctx):
     )
 
 
-# @bot.command()
-# async def party(ctx, pt_num=2, alloc_num=5):
-#     global stocked_mem
-#     msg = "SYNOPSIS: /party [Party Number] [Allocation Number]"
+@bot.command()
+async def party(ctx, pt_num=2, alloc_num=5):
+    global stocked_mem
+    msg = "SYNOPSIS: /party [Party Number] [Allocation Number]"
 
-#     parties = {}
-#     pools = list(stocked_mem.values())
-#     pools = [list(s) for s in itertools.zip_longest(*pools)]
-#     flatten_pools = [item for sublist in pools for item in sublist if item is not None]
-#     flatten_pools.reverse()
+    parties = {}
+    pools = list(stocked_mem.values())
+    pools = [list(s) for s in itertools.zip_longest(*pools)]
+    flatten_pools = [item for sublist in pools for item in sublist if item is not None]
+    flatten_pools.reverse()
 
-#     for party in range(pt_num):
-#         # creating the party
-#         key = "Party-" + str(party + 1)
-#         parties[key] = []
-#         for alloc in range(alloc_num):
-#             if len(flatten_pools):
-#                 parties[key].append(flatten_pools.pop())
+    for party in range(pt_num):
+        # creating the party
+        key = "Party-" + str(party + 1)
+        parties[key] = []
+        for alloc in range(alloc_num):
+            if len(flatten_pools):
+                parties[key].append(flatten_pools.pop())
 
-#     msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
-#     await ctx.channel.send(msg)
+    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
+    await ctx.channel.send(msg)
 
 
-# @bot.command()
-# async def man(ctx):
-#     await ctx.channel.send(HELP)
+@bot.command()
+async def man(ctx):
+    await ctx.channel.send(HELP)
 
 
 # @bot.command()
