@@ -1,9 +1,11 @@
-import os
 import itertools
 import json
+import os
+import re
+
 import discord
 from discord.ext import commands
-import re
+
 from lib.defs import HELP
 
 bot = commands.Bot(command_prefix="/")
@@ -11,6 +13,7 @@ MEMBER_TEMPLATE_FILE = "default_grouping.json"
 SAVEFILE = "./data/savefile.json"
 MEMBER_TEMPLATE = {}
 stocked_mem = MEMBER_TEMPLATE.copy()
+ENCODING = "utf-8"
 
 
 @bot.event
@@ -22,11 +25,11 @@ async def on_ready():
     print(bot.user.id)
     print(discord.__version__)
     if os.path.exists(MEMBER_TEMPLATE_FILE):
-        with open(MEMBER_TEMPLATE_FILE, "rb") as f:
+        with open(MEMBER_TEMPLATE_FILE, "r", encoding=ENCODING) as f:
             MEMBER_TEMPLATE = json.load(f)
             print("member templatefile loaded.")
     if os.path.exists(SAVEFILE):
-        with open(SAVEFILE, "r") as f:
+        with open(SAVEFILE, "r", encoding=ENCODING) as f:
             try:
                 stocked_mem = json.load(f)
                 print("savefile loaded.")
@@ -38,7 +41,7 @@ async def on_ready():
 @bot.event
 async def on_disconnect():
     global SAVEFILE, stocked_mem
-    with open(SAVEFILE, "wb") as f:
+    with open(SAVEFILE, "w", encoding=ENCODING) as f:
         json.dump(stocked_mem, f)
         print("{file} saved.".format(file=SAVEFILE))
 
@@ -146,8 +149,17 @@ async def party(ctx, pt_num=2, alloc_num=5):
 @bot.command()
 async def save(ctx):
     global SAVEFILE, stocked_mem
-    with open(SAVEFILE, "wb") as f:
+    with open(SAVEFILE, "w", encoding=ENCODING) as f:
         json.dump(stocked_mem, f)
+        print("{file} saved.".format(file=SAVEFILE))
+    await ctx.channel.send("現在のグループとメンバーをセーブしました。")
+
+
+@bot.command()
+async def load(ctx):
+    global SAVEFILE, stocked_mem
+    with open(SAVEFILE, "r", encoding=ENCODING) as f:
+        json.load(stocked_mem, f)
         print("{file} saved.".format(file=SAVEFILE))
     await ctx.channel.send("現在のグループとメンバーをセーブしました。")
 
