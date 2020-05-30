@@ -6,8 +6,7 @@ from discord.ext import commands
 import re
 from lib.defs import HELP
 
-command_prefix = "$" if os.getenv("DEBUG", default=False) else "/"
-bot = commands.Bot(command_prefix=command_prefix)
+bot = commands.Bot(command_prefix="/")
 MEMBER_TEMPLATE_FILE = "default_grouping.json"
 SAVEFILE = "./data/savefile.json"
 MEMBER_TEMPLATE = {}
@@ -33,6 +32,7 @@ async def on_ready():
                 print("savefile loaded.")
             except BaseException:
                 stocked_mem = {}
+    print("Command prefix is {pref}".format(pref=command_prefix))
     print("------------------------")
 
 

@@ -4,7 +4,6 @@ services:
     restart: always
     build: .
     environment: 
-      DEBUG: 0
       DISCORD_BOT_TOKEN: "TOKEN_OF_YOUR_DISCORD_BOT"
     volumes:
       - ./data:/app/data:rw
