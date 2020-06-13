@@ -4,6 +4,6 @@ services:
     restart: always
     build: .
     environment: 
-      DISCORD_BOT_TOKEN: "TOKEN_OF_YOUR_DISCORD_BOT"
+      DISCORD_BOT_TOKEN: "yourtoken"
     volumes:
-      - ./data:/app/data:rw
+      - .:/app:rw

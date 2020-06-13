@@ -116,3 +116,4 @@ doc/output/**
 
 .pytest_cache/
 .coverage
+/sa-key.json
