@@ -4,7 +4,6 @@ import pandas as pd
 import os
 
 SA_KEY_FILE = os.getenv("SA_KEY_FILE", default="sa-key.json")
-WORKSHEET_NAME = os.getenv("WORKSHEET_NAME", default="members")
 SCOPE = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",

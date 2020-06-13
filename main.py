@@ -9,7 +9,7 @@ from lib.spread import read_df
 from tabulate import tabulate
 
 bot = commands.Bot(command_prefix="/")
-ws = os.getenv("WORKSHEET", default="members")  # worksheet name
+ws = os.getenv("WORKSHEET_NAME", default="members")  # worksheet name
 tit = os.getenv("TITLE", default="sheet1")  # title name
 
 
@@ -22,20 +22,17 @@ async def on_ready():
     print("------------------------")
 
 
-def _get_member_list(mem):
-    """get formatted member list
-    """
-    return "\t" + "\n\t".join(
-        [i + "= " + ", ".join(mem[i]) for i in [k for k in mem.keys()]]
-    )
+def _tabulation(df):
+    return tabulate(df, headers="keys", showindex="never", tablefmt="simple")
 
 
 @bot.command(name="setws")
 async def worksheet(ctx, title="sheet1"):
     global tit
     tit = title
-    members = tabulate(read_df(ws, tit), headers="keys")
-    msg = "現在のメンバー表を 'ブック名: {ws}, シート名: {tit}' にセットしました。\n内容は次の通りです。\n``{current}``".format(
+    members = _tabulation(read_df(ws, tit))
+    print(tit)
+    msg = "現在のメンバー表を ``{ws}``ブック ``{tit}``シート に設定ました。\n内容は次の通りです。\n``{current}``".format(
         ws=ws, tit=tit, current=members
     )
     await ctx.channel.send(msg)
@@ -43,8 +40,8 @@ async def worksheet(ctx, title="sheet1"):
 
 @bot.command()
 async def show(ctx):
-    members = tabulate(read_df(ws, tit), headers="keys")
-    msg = "現在のメンバー表は 'ブック名: {ws}, シート名: {tit}' で、\n内容は次の通りです。\n``{current}``".format(
+    members = _tabulation(read_df(ws, tit))
+    msg = "現在のメンバー表は ``{ws}``ブック, ``{tit}``シート です。\n内容は次の通りです。\n`` {current} ``".format(
         ws=ws, tit=tit, current=members
     )
     await ctx.channel.send(msg)
@@ -74,7 +71,7 @@ async def party(ctx, pt_num=2, alloc_num=5):
             if len(flatten_pools):
                 parties[key].append(flatten_pools.pop())
 
-    msg = "次のようなパーティ編成はいかがでしょう。\n{res}".format(res=_get_member_list(parties))
+    msg = "次のようなパーティ編成はいかがでしょう。\n``{res}``".format(res=_tabulation(parties))
     await ctx.channel.send(msg)
 
 

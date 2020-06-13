@@ -25,7 +25,7 @@ Cerberus = "*"
 gspread = "*"
 oauth2client = "*"
 pandas = "*"
-tabulate = "*"
+tabulate = {extras = ["widechars"],version = "*"}
 
 [requires]
 python_version = "3.7"
