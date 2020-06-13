@@ -13,10 +13,7 @@ Googleスプレッドシート上に記入したメンバーから、バラン�
   * GCP上でサービスアカウントを作成する
   * スプレッドシートを用意し、サービスアカウントに対して共有する
 1. サービスアカウントのJSON形式のキーを、環境変数 `WORKSHEET_NAME` のパスに配置する
-1. `docker-compose.yml` の `DISCORD_BOT_TOKEN` 環境変数 にBotのトークンを指定する
-1. `docker-copose up -d` する
 1. [Discord のサーバーを作る](https://support.discord.com/hc/ja/articles/204849977-%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%AE%E4%BB%95%E6%96%B9)
-1. このリポジトリをフォークして、ローカルまたは[Herokuなどにデプロイする](https://qiita.com/1ntegrale9/items/aa4b373e8895273875a8)
 1. [Discord Developer Portal](https://discord.com/developers/applications) 上で、[Botを作ってOAUTH2 URLを得る](https://qiita.com/PinappleHunter/items/af4ccdbb04727437477f)
 1. OAUTH2 URL へアクセスして、Botが作ったサーバーに参加することを許可（認証）する
    * https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=0&scope=bot
@@ -36,6 +33,9 @@ Googleスプレッドシート上に記入したメンバーから、バラン�
       サーバにBOTが入った事確認をする。
 
       <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/157638/7bafcd0c-9d00-2b49-2122-583afe83542d.jpeg">
+
+1. `docker-compose.yml` の `DISCORD_BOT_TOKEN` 環境変数 にBotのトークンを指定する
+1. `docker-copose up -d` する
 
 # Reference
 
