@@ -5,7 +5,8 @@ services:
     build: .
     environment: 
       DISCORD_BOT_TOKEN: "yourtoken"
-      WORKSHEET_NAME: "sa-key.json"
-      TITLE: "参加メンバー"
+      SA_KEY_FILE: "sa-key.json"
+      WORKSHEET_NAME: "Google スプレッドシート名"
+      TITLE: "Google スプレッドシート名"
     volumes:
       - .:/app:rw
